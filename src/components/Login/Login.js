@@ -1,11 +1,13 @@
 import React, { useContext, useRef, useState } from "react";
 import AuthContext from "../../store/auth-context";
-import "./Login.css";
+import classes from "./Login.module.css";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const email = useRef();
   const password = useRef();
   const authCtx = useContext(AuthContext);
+  const history = useHistory();
   const [login, setLogin] = useState(true);
 
   const switchMode = (e) => {
@@ -39,6 +41,7 @@ const Login = () => {
 
       if (res.ok) {
         const data = await res.json();
+        history.push("/expense");
 
         // console.log(data, "data");
         authCtx.login(data.idToken);
@@ -56,9 +59,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="background">
-      <div className="shape"></div>
-      <div className="shape"></div>
+    <div className={classes.background}>
       <form>
         <h3>{login ? "Login Here" : "Signup"}</h3>
 
@@ -73,9 +74,11 @@ const Login = () => {
           ref={password}
         />
 
-        <button onClick={submitHandler}>Submit</button>
+        <button onClick={submitHandler} className={classes.loginbutton}>
+          Submit
+        </button>
 
-        <button onClick={switchMode} className="switchMode">
+        <button onClick={switchMode} className={classes.switchMode}>
           {login ? "Create New Account" : "Login With Existing Account"}
         </button>
       </form>
