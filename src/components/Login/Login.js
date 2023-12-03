@@ -68,7 +68,13 @@ const Login = () => {
         <h3>{login ? "Login Here" : "Signup"}</h3>
 
         <label htmlFor="username">Email</label>
-        <input type="text" placeholder="Email" id="username" ref={email} />
+        <input
+          type="text"
+          placeholder="Email"
+          id="username"
+          ref={email}
+          className={classes.inputLogin}
+        />
 
         <label htmlFor="password">Password</label>
         <input
@@ -76,6 +82,7 @@ const Login = () => {
           placeholder="Password"
           id="password"
           ref={password}
+          className={classes.inputLogin}
         />
 
         <button onClick={submitHandler} className={classes.loginbutton}>

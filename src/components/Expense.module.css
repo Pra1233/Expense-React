@@ -59,3 +59,32 @@ span {
   background-color: black;
   height: 0.3rem;
 }
+
+.input {
+  width: 140px;
+  height: 50px;
+  background-color: white;
+  border-radius: 5px;
+  padding: 0 10px;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 300;
+  border: 1px solid black;
+}
+.expense {
+  display: flex;
+  justify-content: space-evenly;
+}
+.button {
+  margin-top: 58px;
+  margin-left: 40px;
+  width: 7vw;
+  height: 50px;
+  background-color: #156eb8;
+  color: #080710;
+  padding: 5px 0;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -28,7 +28,7 @@ const ForgotPassword = () => {
           }),
         }
       );
-
+      setLoading(false);
       if (res.ok) {
         const data = await res.json();
 
@@ -53,7 +53,13 @@ const ForgotPassword = () => {
         <h3>Forgot Password</h3>
 
         <label htmlFor="username">Enter Registered Email</label>
-        <input type="text" placeholder="Email" id="username" ref={emailInput} />
+        <input
+          type="text"
+          placeholder="Email"
+          id="username"
+          ref={emailInput}
+          className={classes.inputForgot}
+        />
 
         <button onClick={submitHandler} className={classes.forgotbutton}>
           {loading ? "Loading ..." : "Send A Link"}
