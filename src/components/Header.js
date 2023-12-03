@@ -28,13 +28,15 @@ const Header = () => {
       if (res.ok) {
         const data = await res.json();
         console.log("Verification email sent successfully to:", data.email);
-        console.log(data);
+        alert("Successful");
       } else {
         const data = await res.json();
         console.error("Error Sending Verification Email", data.error.message);
+        alert(data.error.message);
       }
     } catch (e) {
       console.error("Error", e.message);
+      alert(e.message);
     }
   };
 

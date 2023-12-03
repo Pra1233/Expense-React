@@ -6,7 +6,7 @@ const Expense = () => {
   return (
     <>
       <header className={classes.headerExpense}>
-        Welcome to Expense Tracker
+        <div className={classes.h}> Welcome to Expense Tracker</div>
         <div className={classes.profile}>
           <span>Your Profile is Incomplete</span>
           <NavLink to="/profile" activeClassName="profile">
@@ -14,6 +14,8 @@ const Expense = () => {
           </NavLink>
         </div>
       </header>
+
+      <div className={classes.line}></div>
     </>
   );
 };

@@ -6,9 +6,8 @@
   margin-bottom: 2rem;
   height: 2rem;
   margin-top: 1rem;
-  border-bottom: 5px solid black;
-  /* background-color: rgb(206, 130, 31); */
 }
+
 .profile {
   color: red;
   margin-left: 25rem !important;
@@ -42,4 +41,21 @@ span {
   color: black;
   font-size: large;
   border-radius: 5px;
+}
+
+.h {
+  margin-left: 10%;
+  font-weight: 200;
+  font-size: large;
+}
+@media only screen and (max-width: 600px) {
+  .h {
+    margin-left: 5%;
+    font-size: small;
+  }
+}
+
+.line {
+  background-color: black;
+  height: 0.3rem;
 }

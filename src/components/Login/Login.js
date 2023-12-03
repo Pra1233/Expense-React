@@ -15,6 +15,10 @@ const Login = () => {
     setLogin((prev) => !prev);
   };
 
+  const forgotPasswordHandler = () => {
+    history.push("/ForgotPassword");
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     const emailInput = email.current.value;
@@ -78,9 +82,18 @@ const Login = () => {
           Submit
         </button>
 
-        <button onClick={switchMode} className={classes.switchMode}>
-          {login ? "Create New Account" : "Login With Existing Account"}
-        </button>
+        <div className={classes.forgot}>
+          <button onClick={switchMode} className={classes.switchMode}>
+            {login ? "Create New Account" : "Login With Existing Account"}
+          </button>
+
+          <button
+            onClick={forgotPasswordHandler}
+            className={classes.forgotPassword}
+          >
+            Forgot Password
+          </button>
+        </div>
       </form>
     </div>
   );
