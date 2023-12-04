@@ -1,24 +1,102 @@
 import React from "react";
-import { useRef } from "react";
+import { useEffect } from "react";
+import { useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import classes from "./Expense.module.css";
+import ExpenseList from "./ExpenseList";
+import axios from "axios";
 
 const Expense = () => {
   const amountInput = useRef();
   const descriptionInput = useRef();
   const categoryInput = useRef();
+  const [expenses, setExpenses] = useState([]);
 
-  const expenseHandler = () => {
+  const url = "https://ecommerce-66b74-default-rtdb.firebaseio.com/";
+
+  useEffect(() => {
+    getExpense();
+  }, []);
+
+  const deleteHandler = async (id) => {
+    console.log(id, "id");
+    try {
+      const res = await axios.delete(`${url}expense/${id}.json`);
+      getExpense();
+      console.log(res, "ss");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const editHandler = (id, e) => {
+    document.getElementById("amount").value = e.amount;
+    document.getElementById("des").value = e.description;
+    document.getElementById("category").value = e.category;
+
+    deleteHandler(id);
+  };
+
+  const getExpense = async () => {
+    try {
+      const res = await fetch(`${url}expense.json`, {
+        method: "GET",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+        const x = Object.entries(data);
+        console.log(x, "x");
+        setExpenses(x);
+        // setExpenses(Object.values(data));
+      } else {
+        const data = await res.json();
+        let errorMsg = "Post Expense Fail";
+        if (data.error.message) {
+          errorMsg = data.error.message;
+        }
+        console.log(errorMsg);
+        alert(errorMsg);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const expenseHandler = async () => {
     const amount = amountInput.current.value;
     const description = descriptionInput.current.value;
     const category = categoryInput.current.value;
     console.log(amount, description, category);
 
-    const ul = document.getElementById("ul");
-    const li = document.createElement("li");
-    li.innerHTML += `Amount ${amount} - Description ${description} -Category ${category} `;
-    ul.appendChild(li);
+    try {
+      const res = await fetch(`${url}expense.json`, {
+        method: "POST",
+        body: JSON.stringify({
+          amount: amount,
+          description: description,
+          category: category,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+        getExpense();
+      } else {
+        const data = await res.json();
+        let errorMsg = "Post Expense Fail";
+        if (data.error.message) {
+          errorMsg = data.error.message;
+        }
+        console.log(errorMsg);
+        alert(errorMsg);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
+
   return (
     <>
       <header className={classes.headerExpense}>
@@ -41,6 +119,7 @@ const Expense = () => {
             ref={amountInput}
             className={classes.input}
             required
+            id="amount"
           />
         </div>
 
@@ -52,12 +131,13 @@ const Expense = () => {
             required
             className={classes.input}
             ref={descriptionInput}
+            id="des"
           />
         </div>
 
         <div>
           <label htmlFor="category">Category</label>
-          <select ref={categoryInput} className={classes.input}>
+          <select ref={categoryInput} className={classes.input} id="category">
             <option>Select Item</option>
             <option value="Food">Food</option>
             <option value="Clothes">Clothes</option>
@@ -69,7 +149,11 @@ const Expense = () => {
           Add
         </button>
       </div>
-      <li id="ul"></li>
+      <ExpenseList
+        expenses={expenses}
+        onDelete={deleteHandler}
+        onEdit={editHandler}
+      />
     </>
   );
 };

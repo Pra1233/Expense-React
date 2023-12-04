@@ -2,7 +2,7 @@ import React from "react";
 import { useContext, useEffect } from "react";
 import { useRef } from "react";
 import AuthContext from "../store/auth-context";
-import "./Profile.css";
+import classes from "./Profile.module.css";
 const Profile = () => {
   const nameInput = useRef();
   const urlInput = useRef();
@@ -83,10 +83,16 @@ const Profile = () => {
   };
   return (
     <form onSubmit={onPost}>
-      <label>Full Name : </label>
-      <input type="text" required ref={nameInput} id="name" />
-      <label>Profile Photo URL : </label>
-      <input type="text" ref={urlInput} id="url" />
+      <label className={classes.label}>Full Name : </label>
+      <input
+        type="text"
+        required
+        ref={nameInput}
+        id="name"
+        className={classes.input}
+      />
+      <label className={classes.label}>Profile Photo URL : </label>
+      <input type="text" ref={urlInput} id="url" className={classes.input} />
       <button>Update</button>
     </form>
   );
