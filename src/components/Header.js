@@ -1,15 +1,19 @@
 import React from "react";
-import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import AuthContext from "../store/auth-context";
 import classes from "./Expense.module.css";
+import { useSelector } from "react-redux";
+import { authActions } from "../store/auth";
+import { useDispatch } from "react-redux";
 
 const Header = () => {
-  const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+  const islogin = !!token;
+  const isPremium = useSelector((state) => state.expense.isPremium);
+  console.log(isPremium, "isPrem");
   const key = "AIzaSyBsDLPBGuT6kOlPdPc5f-SeSOz-Xdjyj0s";
   const onLogout = () => {
-    authCtx.logout();
-    localStorage.removeItem("token");
+    dispatch(authActions.logout());
   };
 
   const verifyEmail = async () => {
@@ -20,7 +24,7 @@ const Header = () => {
           method: "POST",
           body: JSON.stringify({
             requestType: "VERIFY_EMAIL",
-            idToken: authCtx.token,
+            idToken: token,
           }),
         }
       );
@@ -42,17 +46,20 @@ const Header = () => {
 
   return (
     <div className={classes.header}>
-      {!authCtx.isloggedin && (
+      {!islogin && (
         <NavLink to="/login" className={classes.login}>
           Login
         </NavLink>
       )}
-      {authCtx.isloggedin && (
+      {islogin && (
         <button onClick={onLogout} className={classes.logout}>
           Logout
         </button>
       )}
-      {authCtx.isloggedin && (
+
+      {isPremium && <button>Activate Premium Button</button>}
+
+      {islogin && (
         <button className={classes.logout} onClick={verifyEmail}>
           Verify Email
         </button>

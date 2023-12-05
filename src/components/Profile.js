@@ -1,12 +1,16 @@
 import React from "react";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useRef } from "react";
-import AuthContext from "../store/auth-context";
+// import AuthContext from "../store/auth-context";
 import classes from "./Profile.module.css";
+import { useSelector } from "react-redux";
+
 const Profile = () => {
+  const token = useSelector((state) => state.auth.token);
   const nameInput = useRef();
   const urlInput = useRef();
-  const authCtx = useContext(AuthContext);
+
+  // const authCtx = useContext(AuthContext);
   const key = "AIzaSyBsDLPBGuT6kOlPdPc5f-SeSOz-Xdjyj0s";
 
   useEffect(() => {
@@ -15,6 +19,7 @@ const Profile = () => {
   });
 
   const onGet = async () => {
+    console.log("onGET", token);
     try {
       const res = await fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${key}`,
@@ -24,7 +29,7 @@ const Profile = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            idToken: authCtx.token,
+            idToken: token,
           }),
         }
       );
@@ -59,7 +64,7 @@ const Profile = () => {
             displayName: name,
             photoUrl: url,
             returnSecureToken: true,
-            idToken: authCtx.token,
+            idToken: token,
           }),
         }
       );

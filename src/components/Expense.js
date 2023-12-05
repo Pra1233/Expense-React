@@ -5,12 +5,15 @@ import { NavLink } from "react-router-dom";
 import classes from "./Expense.module.css";
 import ExpenseList from "./ExpenseList";
 import axios from "axios";
+import { expenseAction } from "../store/expense";
+import { useDispatch } from "react-redux";
 
 const Expense = () => {
   const amountInput = useRef();
   const descriptionInput = useRef();
   const categoryInput = useRef();
   const [expenses, setExpenses] = useState([]);
+  const dispatch = useDispatch();
 
   const url = "https://ecommerce-66b74-default-rtdb.firebaseio.com/";
 
@@ -46,10 +49,9 @@ const Expense = () => {
       if (res.ok) {
         const data = await res.json();
         console.log(data);
-        const x = Object.entries(data);
-        console.log(x, "x");
-        setExpenses(x);
-        // setExpenses(Object.values(data));
+        const arr = Object.entries(data);
+        dispatch(expenseAction.saveItem(arr));
+        setExpenses(arr);
       } else {
         const data = await res.json();
         let errorMsg = "Post Expense Fail";

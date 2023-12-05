@@ -1,14 +1,17 @@
-import React, { useContext, useRef, useState } from "react";
-import AuthContext from "../../store/auth-context";
+import React, { useRef, useState } from "react";
+// import AuthContext from "../../store/auth-context";
 import classes from "./Login.module.css";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/auth";
 
 const Login = () => {
   const email = useRef();
   const password = useRef();
-  const authCtx = useContext(AuthContext);
   const history = useHistory();
   const [login, setLogin] = useState(true);
+
+  const dispatch = useDispatch();
 
   const switchMode = (e) => {
     e.preventDefault();
@@ -46,9 +49,9 @@ const Login = () => {
       if (res.ok) {
         const data = await res.json();
         history.push("/expense");
-
-        // console.log(data, "data");
-        authCtx.login(data.idToken);
+        // authCtx.login(data.idToken);
+        localStorage.setItem("token", data.idToken);
+        dispatch(authActions.login());
       } else {
         const data = await res.json();
         let errorMsg = login ? "Login Failed" : "Signup Failed";
