@@ -7,6 +7,9 @@ import ExpenseList from "./ExpenseList";
 import axios from "axios";
 import { expenseAction } from "../store/expense";
 import { useDispatch } from "react-redux";
+import { cartAction } from "../store/cart";
+import { useSelector } from "react-redux";
+import Cart from "./Cart";
 
 const Expense = () => {
   const amountInput = useRef();
@@ -14,12 +17,10 @@ const Expense = () => {
   const categoryInput = useRef();
   const [expenses, setExpenses] = useState([]);
   const dispatch = useDispatch();
+  const showCart = useSelector((state) => state.cart.showCart);
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   const url = "https://ecommerce-66b74-default-rtdb.firebaseio.com/";
-
-  useEffect(() => {
-    getExpense();
-  }, []);
 
   const deleteHandler = async (id) => {
     console.log(id, "id");
@@ -66,11 +67,14 @@ const Expense = () => {
     }
   };
 
+  useEffect(() => {
+    getExpense();
+  }, []);
+
   const expenseHandler = async () => {
     const amount = amountInput.current.value;
     const description = descriptionInput.current.value;
     const category = categoryInput.current.value;
-    console.log(amount, description, category);
 
     try {
       const res = await fetch(`${url}expense.json`, {
@@ -94,11 +98,18 @@ const Expense = () => {
         console.log(errorMsg);
         alert(errorMsg);
       }
+
+      amountInput.current.value = "";
+      descriptionInput.current.value = "";
+      categoryInput.current.value = "";
     } catch (e) {
       console.error(e);
     }
   };
 
+  const toggleCartHandler = () => {
+    dispatch(cartAction.toggleCart());
+  };
   return (
     <>
       <header className={classes.headerExpense}>
@@ -109,7 +120,12 @@ const Expense = () => {
             Complete Profile
           </NavLink>
         </div>
+        <button className={classes.cart} onClick={toggleCartHandler}>
+          Cart
+        </button>
+        <span className={classes.cartspan}> {totalQuantity}</span>
       </header>
+      {showCart && <Cart />}
       <div className={classes.line}></div>
 
       <div className={classes.expense}>
@@ -140,7 +156,9 @@ const Expense = () => {
         <div>
           <label htmlFor="category">Category</label>
           <select ref={categoryInput} className={classes.input} id="category">
-            <option>Select Item</option>
+            <option disabled selected value="">
+              Select Item
+            </option>
             <option value="Food">Food</option>
             <option value="Clothes">Clothes</option>
             <option value="Medicine">Medicine</option>
@@ -151,11 +169,15 @@ const Expense = () => {
           Add
         </button>
       </div>
-      <ExpenseList
-        expenses={expenses}
-        onDelete={deleteHandler}
-        onEdit={editHandler}
-      />
+
+      {expenses.map((item) => (
+        <ExpenseList
+          key={item[0]}
+          expense={item}
+          onDelete={deleteHandler}
+          onEdit={editHandler}
+        />
+      ))}
     </>
   );
 };
